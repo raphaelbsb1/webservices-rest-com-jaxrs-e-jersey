@@ -17,13 +17,14 @@ import org.junit.Test;
 
 import com.thoughtworks.xstream.XStream;
 
-import br.com.alura.loja.modelo.Projeto;
+import br.com.alura.loja.modelo.Carrinho;
+import br.com.alura.loja.modelo.Produto;
 
-public class ProjetoTest {
-
+public class CarrinhoTest {
+	
 	HttpServer server;
 	WebTarget target;
-
+	
 	@Before
 	public void antes() {
 		server = Servidor.inicializaServidor();
@@ -31,26 +32,34 @@ public class ProjetoTest {
 		config.register(new LoggingFilter());
 		Client client = ClientBuilder.newClient(config);
 		target = client.target("http://localhost:8080");
-	}
-
+	}	
+	
 	@Test
-	public void testaQueAConexaoComOServidorFuncionaNoPathDeProjetos() {
-		String conteudo = target.path("/projetos/1").request().get(String.class);
-		Projeto projeto = (Projeto) new XStream().fromXML(conteudo);
-		Assert.assertEquals(projeto.getNome(), "Minha loja");
+	public void testaQueBuscarUmCarrinhoTrazOCarrinhoEsperado(){
+		String conteudo = target.path("/carrinhos/1").request().get(String.class);
+		Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
+		Assert.assertEquals(carrinho.getRua(), "Rua Vergueiro 3185, 8 andar");
 	}
-
+	
+	
 	@Test
-	public void deveInserirUmProjeto() {
-		Projeto projeto = new Projeto(3l, "Meu conhecimento", 2017);
-		String conteudo = projeto.toXML();
-		Entity<String> entity = Entity.entity(conteudo, MediaType.APPLICATION_XML);
-		Response response = target.path("/projetos").request().post(entity);
-		Assert.assertEquals(201, response.getStatus());
+	public void deveInserirItemCarrinho() {
+		Carrinho carrinho = new Carrinho();
+        carrinho.adiciona(new Produto(314L, "Tablet", 999, 1));
+        carrinho.setRua("Rua Vergueiro");
+        carrinho.setCidade("Sao Paulo");
+        String xml = carrinho.toXML();
+        
+        Entity<String> entity = Entity.entity(xml, MediaType.APPLICATION_XML);
+        Response response = target.path("/carrinhos").request().post(entity);
+        Assert.assertEquals(201, response.getStatus());
 	}
 
+	
+	
 	@After
 	public void depois() {
 		server.stop();
-	}
+	}	
+
 }
