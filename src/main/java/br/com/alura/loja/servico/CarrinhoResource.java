@@ -33,15 +33,14 @@ public class CarrinhoResource {
 	@Path("{id}")
 	@GET //O GET é um recurso usado para consulta informações
 	@Produces(MediaType.APPLICATION_XML)
-	public String busca(@PathParam("id") long id) {
+	public Carrinho busca(@PathParam("id") long id) {
 		Carrinho carrinho = new CarrinhoDAO().busca(id);
-		return carrinho.toXML();
+		return carrinho;
 	}
 	
 	@POST //O POST é um recurso usado para inclusão de informações
 	@Consumes(MediaType.APPLICATION_XML)
-	public Response adiciona(String conteudo) {
-		Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
+	public Response adiciona(Carrinho carrinho) {
 		new CarrinhoDAO().adiciona(carrinho);
 		URI uri = URI.create("carrinhos/"+carrinho.getId());
 		return Response.created(uri).build();

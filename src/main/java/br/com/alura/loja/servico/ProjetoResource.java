@@ -23,9 +23,9 @@ public class ProjetoResource {
 	@Path("{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public String listar(@PathParam("id") long id) {
+	public Projeto listar(@PathParam("id") long id) {
 		Projeto projeto = new ProjetoDAO().busca(id);
-		return projeto.toXML();
+		return projeto;
 	}
 	
 	
@@ -46,8 +46,7 @@ public class ProjetoResource {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
-	public Response adiciona(String conteudo) {
-		Projeto projeto = (Projeto) new XStream().fromXML(conteudo);
+	public Response adiciona(Projeto projeto) {
 		new ProjetoDAO().adiciona(projeto);
 		URI uri = URI.create("carrinhos/"+projeto.getId());
 		return Response.created(uri).build();

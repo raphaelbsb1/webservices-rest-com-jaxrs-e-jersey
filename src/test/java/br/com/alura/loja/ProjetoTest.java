@@ -35,16 +35,14 @@ public class ProjetoTest {
 
 	@Test
 	public void testaQueAConexaoComOServidorFuncionaNoPathDeProjetos() {
-		String conteudo = target.path("/projetos/1").request().get(String.class);
-		Projeto projeto = (Projeto) new XStream().fromXML(conteudo);
+		Projeto projeto = target.path("/projetos/1").request().get(Projeto.class);
 		Assert.assertEquals(projeto.getNome(), "Minha loja");
 	}
 
 	@Test
 	public void deveInserirUmProjeto() {
 		Projeto projeto = new Projeto(3l, "Meu conhecimento", 2017);
-		String conteudo = projeto.toXML();
-		Entity<String> entity = Entity.entity(conteudo, MediaType.APPLICATION_XML);
+		Entity<Projeto> entity = Entity.entity(projeto, MediaType.APPLICATION_XML);
 		Response response = target.path("/projetos").request().post(entity);
 		Assert.assertEquals(201, response.getStatus());
 	}

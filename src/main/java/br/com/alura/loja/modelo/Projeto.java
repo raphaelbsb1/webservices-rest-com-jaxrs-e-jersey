@@ -1,8 +1,14 @@
 package br.com.alura.loja.modelo;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Projeto {
 	
 	private Long id;
@@ -10,6 +16,9 @@ public class Projeto {
 	private String nome;
 	
 	private Integer ano;
+
+	public Projeto() {
+	}
 
 	public Projeto(Long id, String nome, Integer ano) {
 		super();
