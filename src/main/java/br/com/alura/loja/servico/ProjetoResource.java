@@ -12,21 +12,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.thoughtworks.xstream.XStream;
-
 import br.com.alura.loja.dao.ProjetoDAO;
 import br.com.alura.loja.modelo.Projeto;
 
 @Path("projetos")
 public class ProjetoResource {
 
-	@Path("{id}")
+/*	@Path("{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	public Projeto listar(@PathParam("id") long id) {
 		Projeto projeto = new ProjetoDAO().busca(id);
 		return projeto;
-	}
+	}*/
 	
 	
 	/**
@@ -35,20 +33,20 @@ public class ProjetoResource {
 	 * @param id
 	 * @return
 	 */
-/*	@Path("{id}")
+	@Path("{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listar(@PathParam("id") long id) {
 		Projeto projeto = new ProjetoDAO().busca(id);
 		return projeto.toJson();
-	}*/
+	}
 	
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
 	public Response adiciona(Projeto projeto) {
 		new ProjetoDAO().adiciona(projeto);
-		URI uri = URI.create("carrinhos/"+projeto.getId());
+		URI uri = URI.create("projeto/"+projeto.getId());
 		return Response.created(uri).build();
 	}
 	
